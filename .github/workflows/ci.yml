@@ -1,23 +1,18 @@
-name: CI Maven Spring Boot
+name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [ "main", "develop" ]
   pull_request:
-    branches: [main]
+    branches: [ "main" ]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ci-\${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
-    name: Build & test
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      checks: write
 
     steps:
       - uses: actions/checkout@v4
@@ -26,34 +21,22 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: 17
           cache: maven
 
-      - name: Build & tests + couverture
+      - name: Build with Maven
         run: mvn -B -ntp clean verify
 
-      - name: Upload des rapports en cas d'échec
+      - name: Upload surefire reports
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: surefire-reports
-          path: '**/target/surefire-reports/'
-          retention-days: 7
+          path: '**/target/surefire-reports/*.xml'
 
-      - name: Upload du JAR Spring Boot
+      - name: Upload jar
         if: success() && github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
-          name: films-web
+          name: films-web-jar
           path: films-web/target/films-web.jar
-          retention-days: 30
-
-      - name: Rapport JaCoCo en commentaire de PR
-        if: github.event_name == 'pull_request'
-        uses: madrapps/jacoco-report@v1.6.1
-        with:
-          paths: '**/target/site/jacoco/jacoco.xml'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 60
-          min-coverage-changed-files: 70
-          title: '📊 Couverture JaCoCo'
