@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: films
+  profiles:
+    active: dev
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
