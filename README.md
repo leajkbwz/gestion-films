@@ -1,10 +1,10 @@
-# 🎬 Gestion de Films
+# Gestion de Films
 
 API REST Spring Boot multi-modules pour gérer un catalogue de films et leurs réalisateurs.
 
-![CI](https://github.com/Veudzveulay/maeven_project/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/leajkbwz/gestion-films/actions/workflows/ci.yml/badge.svg)
 
-## 🏗️ Architecture
+## Architecture
 
 Projet Maven multi-modules :
 
@@ -30,7 +30,7 @@ gestion-films/
 | `id`              | Long   |
 | `nom`             | String, unique, max 200 |
 
-## 🚀 Build & lancement
+## Build & lancement
 
 ### Build complet (les 3 modules)
 ```bash
@@ -52,7 +52,7 @@ java -jar films-web/target/films-web.jar --spring.profiles.active=prod
 
 Variables d'environnement attendues : `DB_URL`, `DB_USER`, `DB_PASSWORD`.
 
-## 🌐 Endpoints
+## Endpoints
 
 | Verbe  | Path              | Description           | Statut succès |
 |--------|-------------------|-----------------------|---------------|
@@ -67,7 +67,7 @@ Variables d'environnement attendues : `DB_URL`, `DB_USER`, `DB_PASSWORD`.
 - `404` — `FilmNotFoundException`
 - `409` — `TitreDejaExistantException`
 
-## 🧪 Exemples curl
+## Exemples de curl
 
 ```bash
 # Créer
@@ -90,7 +90,7 @@ curl -X PUT http://localhost:8080/api/films/1 \
 curl -X DELETE http://localhost:8080/api/films/1 -i
 ```
 
-## 🧪 Tests
+## Tests
 
 ```bash
 mvn verify
@@ -101,7 +101,7 @@ mvn verify
 - Tests d'intégration `@SpringBootTest` + MockMvc (suffixe `IT`) → Failsafe
 - Couverture JaCoCo générée à `films-*/target/site/jacoco/`
 
-## ⚙️ Profils Maven vs Profils Spring
+## Profils Maven vs Profils Spring
 
 | Aspect       | Profil **Maven**                          | Profil **Spring**                              |
 |--------------|-------------------------------------------|------------------------------------------------|
@@ -112,10 +112,14 @@ mvn verify
 
 Les deux sont **indépendants** et peuvent se combiner : un build Maven en profil `release` peut produire un JAR exécuté avec `--spring.profiles.active=prod`.
 
-## 🤖 CI
+## Intégration Continue IC
 
 GitHub Actions exécute `mvn clean verify` à chaque push (`main`, `develop`) et pull request sur `main`.
 Le workflow upload :
 - les rapports surefire en cas d'échec,
 - le JAR final (`films-web.jar`) en cas de succès sur `main`,
 - un commentaire JaCoCo sur les PRs.
+
+Le badge CI dans le README indique l’état du pipeline :
+- vert : build réussi
+- rouge : build en échec
